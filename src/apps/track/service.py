@@ -1,0 +1,19 @@
+from re import I
+from src.apps.track.depends import manager
+from src.apps.track.schemas import ID_Field, Pagination
+from src.apps.auth.schemas import UserResponse
+
+
+class Service:
+    def __init__(self, manager: manager) -> None:
+        self.manager = manager
+
+
+    async def get_track_by_id(self, ID: ID_Field):
+        return await self.manager.get_track_by_id(ID=ID)
+    
+    async def get_popular_tracks(self, params: Pagination):
+        return await self.manager.get_popular_tracks(params=params)
+    
+
+    
