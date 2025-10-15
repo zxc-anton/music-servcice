@@ -3,6 +3,6 @@ from src.apps.search.dependency import service
 from fastapi import Query
 
 
-@router.get("/")
+@router.get("/search")
 async def search(service: service, q: str = Query()):
     return await service.search(q=q)

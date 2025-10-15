@@ -1,7 +1,8 @@
 import bcrypt
 from settings.setting import settings
 from itsdangerous import URLSafeTimedSerializer, BadSignature
-from src.apps.auth.schemas import EmailField, TokenData
+from src.apps.auth.schemas import TokenData
+from src.schemas import EmailField
 from fastapi import HTTPException
 import jwt
 from typing import Any

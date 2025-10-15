@@ -4,8 +4,8 @@ from database.models import Base
 
 favorites = sa.Table("favorites",
                      Base.metadata,
-                     sa.Column("user_ID", sa.Integer(), sa.ForeignKey("user.ID"), nullable=True),
-                     sa.Column("track_ID", sa.Integer(), sa.ForeignKey("track.ID"), nullable=True)
+                     sa.Column("user_ID", sa.Integer(), sa.ForeignKey("user.ID"), nullable=True, primary_key=True),
+                     sa.Column("track_ID", sa.Integer(), sa.ForeignKey("track.ID"), nullable=True, primary_key=True)
                      )
 
 Track_Artist = sa.Table("track_artist",

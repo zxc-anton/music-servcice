@@ -1,9 +1,14 @@
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.apps.main import router
+from fastapi.responses import ORJSONResponse
 
 
-app = FastAPI()
+
+app = FastAPI(
+    default_response_class=ORJSONResponse
+)
 
 app.add_middleware(
     CORSMiddleware,

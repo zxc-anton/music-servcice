@@ -1,10 +1,11 @@
-from curses.ascii import US
-from src.apps.track.depends import db
+from src.dependency import db
 from database.models import Track, User, Author
-from src.apps.track.schemas import ID_Field, Pagination
+from src.schemas import ID_Field, PaginationParams
 import sqlalchemy as sa
 from database.association_tables import Track_Artist
 from sqlalchemy import func
+from sqlalchemy.exc import NoResultFound
+from fastapi import HTTPException
 
 
 class Manager:
@@ -16,16 +17,17 @@ class Manager:
         self.db = db
 
     async def get_track_by_id(self, ID: ID_Field):
-        query = (sa.select(self.model.ID, self.model.file_url, self.author_model.ID, 
-                           self.author_model.name, self.author_model.photo_url)
-                           .join(self.author_model, self.model.authors)).where(self.model.ID==ID)
+        query = (sa.select(self.model.ID, self.model.file_url, self.model.title, self.model.album_ID)
+                           .where(self.model.ID==ID))
         async with self.db.get_session() as session:
-            result = await session.execute(query)
-        track = result.mappings().all()
-        return track
+            result = await session.execute(query) 
+        try:
+            return result.mappings().one()
+        except NoResultFound:
+            raise HTTPException(404, "Track not found.")
 
         
-    async def get_popular_tracks(self, params: Pagination):
+    async def get_popular_tracks(self, params: PaginationParams):
         query = (
             sa.select(
                 self.model,
@@ -41,12 +43,5 @@ class Manager:
             result = await session.execute(query)
         return result.mappings().all()
     
-    async def get_listen_history(self, params: Pagination, ID: ID_Field):
-        query = (sa.select(self.model.ID, self.model.file_url, self.author_model.ID, 
-                           self.author_model.name, self.author_model.photo_url)
-                           .join(self.author_model, self.model.authors)
-                           .join(self.user_model, self.user_model.listening_songs))
-        async with self.db.get_session() as session:
-            result = await session.execute(query)
-            return result.mappings().all()
+    
 

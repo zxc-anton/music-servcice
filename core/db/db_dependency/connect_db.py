@@ -17,3 +17,7 @@ class DB_dependency:
                 yield session
             finally:
                 await session.close()
+    
+    async def close_db(self):
+        print("зфкрыто")
+        await self._async_engine.dispose()

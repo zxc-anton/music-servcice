@@ -22,37 +22,41 @@ class User(ID_mixin, TIMESTAMP_mixin, Base):
     avatar_url: so.Mapped[str | None] = so.mapped_column(nullable=True)
     is_verification: so.Mapped[bool] = so.mapped_column(nullable=False, default=False)
 
-    posts: so.Mapped[list["Playlist"]] = so.relationship("Playlist", back_populates="user", cascade="all, delete-orphan")
-    tracks: so.Mapped[list["Track"]] = so.Relationship("Track", secondary=favorites, back_populates="users")
-    listening_songs: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Listen_History, back_populates="listening_users")
+    playlists: so.Mapped[list["Playlist"]] = so.relationship("Playlist", back_populates="user", cascade="all, delete")
+    tracks: so.Mapped[list["Track"]] = so.Relationship("Track", secondary=favorites, back_populates="users", cascade="all, delete")
+    listening_songs: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Listen_History, back_populates="listening_users", cascade="all, delete")
 
 class Track(TIMESTAMP_mixin, ID_mixin,  Base):
     title: so.Mapped[str] = so.mapped_column(sa.String, nullable=False, index=True)
     file_url: so.Mapped[path_str]
-    
-    users: so.Mapped[list["User"]] = so.relationship("User", secondary=favorites, back_populates="tracks")
-    authors: so.Mapped[list["Author"]] = so.relationship("Author", secondary=Track_Artist, back_populates="tracks")
-    playlists: so.Mapped[list["Playlist"]] = so.relationship("Playlist", secondary=Playlist_Track, back_populates="tracks")
-    listening_users: so.Mapped[list["User"]] = so.relationship("User", secondary=Listen_History, back_populates="listening_songs")
+    album_ID: so.Mapped[int | None] = so.mapped_column(sa.ForeignKey("album.ID"), nullable=True, default=None)
+
+
+    album: so.Mapped["Album"] = so.relationship("Album", back_populates="tracks")
+    users: so.Mapped[list["User"]] = so.relationship("User", secondary=favorites, back_populates="tracks", cascade="all, delete")
+    authors: so.Mapped[list["Author"]] = so.relationship("Author", secondary=Track_Artist, back_populates="tracks",cascade="all, delete")
+    playlists: so.Mapped[list["Playlist"]] = so.relationship("Playlist", secondary=Playlist_Track, back_populates="tracks", cascade="all, delete")
+    listening_users: so.Mapped[list["User"]] = so.relationship("User", secondary=Listen_History, back_populates="listening_songs", )
 
 class Author(TIMESTAMP_mixin, ID_mixin, Base):
     name: so.Mapped[str] = so.mapped_column(sa.String, nullable=False, index=True)
     photo_url: so.Mapped[path_str]
 
-    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Track_Artist, back_populates="authors")
-    albums: so.Mapped[list["Album"]] = so.relationship("Album", secondary=Album_Author, back_populates="authors")
+    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Track_Artist, back_populates="authors", cascade="all, delete")
+    albums: so.Mapped[list["Album"]] = so.relationship("Album", secondary=Album_Author, back_populates="authors", cascade="all, delete")
 
 class Album(TIMESTAMP_mixin, ID_mixin, Base):
     title: so.Mapped[str] = so.mapped_column(sa.String, nullable=False, index=True)
     cover_url: so.Mapped[path_str]
 
-    authors: so.Mapped[list["Author"]] = so.relationship("Author", secondary=Album_Author, back_populates="albums")
+    tracks: so.Mapped[list[Track]] = so.relationship("Track", back_populates="album")
+    authors: so.Mapped[list["Author"]] = so.relationship("Author", secondary=Album_Author, back_populates="albums", cascade="all, delete")
 
 class Playlist(TIMESTAMP_mixin, ID_mixin, Base):
-    name: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
+    name: so.Mapped[str] = so.mapped_column(sa.String, default="Без названия")
     cover_url: so.Mapped[str | None] = so.mapped_column(unique=True, nullable=True)
     is_public: so.Mapped[bool] = so.mapped_column(sa.Boolean, default=True, server_default="'true")
     user_ID: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.ID"))
 
-    user: so.Mapped["User"] = so.relationship("User", back_populates="posts")
-    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Playlist_Track, back_populates="playlists")
+    user: so.Mapped["User"] = so.relationship("User", back_populates="playlists")
+    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Playlist_Track, back_populates="playlists", cascade="all, delete")

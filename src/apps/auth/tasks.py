@@ -1,7 +1,7 @@
 from core.async_queue.celery_config import app
 import smtplib
 from settings.setting import settings
-from src.apps.auth.schemas import EmailField
+from src.schemas import EmailField
 from email.message import EmailMessage
 import ssl
 

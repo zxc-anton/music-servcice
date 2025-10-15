@@ -1,11 +1,12 @@
 from fastapi import Depends, HTTPException
 from core.db.db_dependency.connect_db import DB_dependency
-from src.apps.auth.schemas import CreateUser, ID_Field, UserResponse, EmailField, PasswordField
+from src.apps.auth.schemas import CreateUser, ID_Field, EmailField, PasswordField
+from src.schemas import UserResponse
 import sqlalchemy as sa
 from database.models import User
 from sqlalchemy.exc import IntegrityError
 from typing import Annotated
-
+from sqlalchemy.exc import NoResultFound
 
 
 class Manager:
@@ -57,7 +58,10 @@ class Manager:
         query = sa.select(self.model.password_hash).where(self.model.email == email)
         async with self.db.get_session() as session:
             result = await session.execute(query)
-        password = result.mappings().one()
+        try:
+            password = result.mappings().one()
+        except NoResultFound:
+            raise HTTPException(404, "User not found.")
         return password["password_hash"]
 
     

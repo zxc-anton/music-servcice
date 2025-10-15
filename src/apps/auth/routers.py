@@ -1,7 +1,8 @@
 from src.apps.auth.main import router
-from src.apps.auth.schemas import ReguesterUser, UserResponse, LoginUser
-from fastapi import Depends, Cookie
-from src.apps.auth.dependency import service, get_current_user
+from src.apps.auth.schemas import ReguesterUser, LoginUser
+from src.schemas import UserResponse
+from fastapi import Depends
+from src.apps.auth.dependency import service, get_current_user, refresh_token
 from typing import Annotated
 from fastapi.responses import JSONResponse
 
@@ -32,13 +33,13 @@ async def current_user(current_user: Annotated[UserResponse, Depends(get_current
     """Получить текущего пользователя."""
     return current_user
 
-@router.get("/update_token")
-async def update_token(refresh_token: Annotated[str, Cookie()], service: service) -> JSONResponse:
+@router.post("/update_token")
+async def update_token(refresh_token: refresh_token, service: service) -> JSONResponse:
     """Обновить токен."""
     return await service.update_token(refresh_token)
 
 @router.post("/logout")
 async def logout(service: service) -> JSONResponse:
-    """Выйти из аккаунта."""
+    """Выйти из аккаунта.""",
     return await service.logout()
     

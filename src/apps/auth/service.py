@@ -3,10 +3,10 @@ from pydantic import Json
 from src.apps.auth.manager import Manager
 from src.apps.auth.handlers import Handlers
 from fastapi import Depends, HTTPException
-from src.apps.auth.schemas import (EmailField, ReguesterUser, CreateUser, 
-                                   ID_Field, UserResponse, 
+from src.apps.auth.schemas import ( ReguesterUser, CreateUser, 
                                     LoginUser, 
                                     TokenData, TokenType)
+from src.schemas import ID_Field, EmailField, UserResponse
 from src.apps.auth.tasks import send_verify_email
 from fastapi.responses import JSONResponse
 from settings.setting import settings
