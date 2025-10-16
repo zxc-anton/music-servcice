@@ -16,7 +16,7 @@ class Manager:
         self.favorites = favorites
 
     async def add_in_favorites(self, track_ID: ID_Field, user_ID: ID_Field) -> None:
-        query = sa.insert(self.favorites).values(user_ID=user_ID, track_ID=track_ID.ID)
+        query = sa.insert(self.favorites).values(user_ID=user_ID.ID, track_ID=track_ID.ID)
         async with self.db.get_session() as session:
             transaction = await session.begin()
             try:
@@ -34,4 +34,7 @@ class Manager:
             await session.execute(query)
             await transaction.commit()
         return 
+    
+    async def add_track_in_playlist(self, track_ID):
+        query = 
 

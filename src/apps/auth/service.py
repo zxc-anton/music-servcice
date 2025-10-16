@@ -8,7 +8,7 @@ from src.apps.auth.schemas import ( ReguesterUser, CreateUser,
                                     TokenData, TokenType)
 from src.schemas import ID_Field, EmailField, UserResponse
 from src.apps.auth.tasks import send_verify_email
-from fastapi.responses import JSONResponse
+from fastapi.responses import ORJSONResponse
 from settings.setting import settings
 from typing import Annotated
 
@@ -36,7 +36,7 @@ class Service:
     async def get_user_by_email(self, email: EmailField) -> UserResponse:
         return await self.manager.get_user_by_email(email)
 
-    async def login(self, login_user: LoginUser) -> JSONResponse:
+    async def login(self, login_user: LoginUser) -> ORJSONResponse:
         hash_password = await self.manager.get_user_password(login_user.email)
         
         if hash_password is None:
@@ -47,22 +47,22 @@ class Service:
         user = await self.manager.get_user_by_email(login_user.email)
         access_token = await self.handlers.create_token(TokenData(token_type=TokenType.access, ID=user.ID))
         refresh_token = await self.handlers.create_token(TokenData(token_type=TokenType.refresh, ID=user.ID))
-        response = JSONResponse(content={"message": "User confirm."})
+        response = ORJSONResponse(content={"message": "User confirm."})
         response.set_cookie(key="access_token", httponly=True, value=access_token, expires=settings.expries_cookie)
         response.set_cookie(key="refresh_token", httponly=True, value=refresh_token, expires=settings.expries_cookie)
         return response
     
-    async def update_token(self, refresh_token: str) -> JSONResponse:
+    async def update_token(self, refresh_token: str) -> ORJSONResponse:
         payload = await self.handlers.decode_token(refresh_token)
         if payload["type"] != TokenType.refresh.value:
             raise HTTPException(401, "Token not invalid")
         token = await self.handlers.create_token(TokenData(ID=payload['sub'], token_type=TokenType.access))
-        response = JSONResponse(content={"message": "token was updated."})        
+        response = ORJSONResponse(content={"message": "token was updated."})        
         response.set_cookie("access_token", value=token, expires=settings.expries_cookie, httponly=True)
         return response
     
-    async def logout(self) -> JSONResponse:
-        response = JSONResponse(content={"message": "logout."})
+    async def logout(self) -> ORJSONResponse:
+        response = ORJSONResponse(content={"message": "logout."})
         response.delete_cookie(TokenType.access.value)
         response.delete_cookie(TokenType.refresh.value)
         return response

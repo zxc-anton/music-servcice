@@ -6,6 +6,7 @@ from src.apps.search.main import router as search_router
 from src.apps.album.main import router as album_router
 from src.apps.artist.main import router as artist_router
 from src.apps.me.main import router as me_router
+from src.apps.stream_servic.main import router as stream_router
 
 
 router = APIRouter(prefix=("/api"))
@@ -16,3 +17,4 @@ router.include_router(search_router)
 router.include_router(album_router)
 router.include_router(artist_router)
 router.include_router(me_router)
+router.include_router(stream_router)

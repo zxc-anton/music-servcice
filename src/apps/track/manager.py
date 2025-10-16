@@ -6,6 +6,7 @@ from database.association_tables import Track_Artist
 from sqlalchemy import func
 from sqlalchemy.exc import NoResultFound
 from fastapi import HTTPException
+from src.apps.track.schemas import Track_Schema, Popular_Tracks_Schema
 
 
 class Manager:
@@ -17,17 +18,17 @@ class Manager:
         self.db = db
 
     async def get_track_by_id(self, ID: ID_Field):
-        query = (sa.select(self.model.ID, self.model.file_url, self.model.title, self.model.album_ID)
-                           .where(self.model.ID==ID))
+        query = (sa.select(self.model)
+                           .where(self.model.ID==ID.ID))
         async with self.db.get_session() as session:
             result = await session.execute(query) 
         try:
-            return result.mappings().one()
+            print(result.mappings().one())
         except NoResultFound:
             raise HTTPException(404, "Track not found.")
 
         
-    async def get_popular_tracks(self, params: PaginationParams):
+    async def get_popular_tracks(self, params: PaginationParams) :
         query = (
             sa.select(
                 self.model,
@@ -41,7 +42,8 @@ class Manager:
         )
         async with self.db.get_session() as session:
             result = await session.execute(query)
-        return result.mappings().all()
+            tracks = result.mappings().all()
+        return Popular_Tracks_Schema(favorits=[Track_Schema(**track) for track in tracks], listen_count=tracks)
     
     
 

@@ -11,3 +11,6 @@ class CreatePlaylist(BaseModel):
 class Playlist(BaseModel):
     name: str | None
     is_public: bool
+
+class Listen_History(BaseModel):
+    data: list

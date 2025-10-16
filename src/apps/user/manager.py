@@ -25,7 +25,7 @@ class Manager:
 
     async def get_user(self, ID: ID_Field):
 
-        query = (sa.select(self.model).where(self.model.ID == ID))
+        query = (sa.select(self.model).where(self.model.ID == ID.ID))
         try:
             async with self.db.get_session() as session:
                 result = await session.execute(query)
@@ -42,7 +42,7 @@ class Manager:
                            self.author_model.name, self.author_model.photo_url)
                  .join(self.model, self.model.ID == self.listen_history.c.user_ID)
                  .join(self.author_model, self.track_model.authors)
-                 .where(self.model.ID == ID)
+                 .where(self.model.ID == ID.ID)
                  .order_by(sa.desc(self.listen_history.c.listened_at))
                  .offset(pagination.offset)
                  .limit(pagination.limit))
@@ -51,7 +51,7 @@ class Manager:
         return result.mappings().all()
     
     async def get_playlists(self, ID: ID_Field, pagination: PaginationParams):
-        query = (sa.select(self.playlist_model).where(self.playlist_model.user_ID == ID)
+        query = (sa.select(self.playlist_model).where(self.playlist_model.user_ID == ID.ID)
                  .offset(pagination.offset)
                  .limit(pagination.limit))
         async with self.db.get_session() as session:
@@ -61,8 +61,10 @@ class Manager:
     async def get_favorits(self, ID: ID_Field, pagination: PaginationParams):
         query = (sa.select(self.model, self.favorites, self.track_model)
                  .join(self.favorites, self.favorites.c.user_ID == self.model.ID)
-                 .where(self.model.ID == ID)
-                 .join(self.track_model, self.favorites.c.track_ID == self.track_model.ID))
+                 .where(self.model.ID == ID.ID)
+                 .join(self.track_model, self.favorites.c.track_ID == self.track_model.ID)
+                 .offset(pagination.offset)
+                 .limit(pagination.limit))
         async with self.db.get_session() as session:
             result = await session.execute(query)
         return result.mappings().all()
