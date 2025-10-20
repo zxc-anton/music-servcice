@@ -7,4 +7,4 @@ class Service:
         self.manager = manager
 
     async def search(self, q: str):
-        return await self.manager.search(q=f"%{q}%")
+        return await self.manager.search(q=f"{q.strip()}%")

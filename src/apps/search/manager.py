@@ -10,10 +10,8 @@ class Manager:
         self.author_model = Author
 
     async def search(self, q: str):
-        query = (sa.select( self.author_model, self.model)
-                 .join(self.author_model, self.model.authors)
-                 .filter(sa.or_(self.model.title.ilike(q),
-                                self.author_model.name.ilike(q))))
+        query = (sa.select(self.model.title).filter(self.model.title.ilike(q)))
+                 
         async with self.db.get_session() as session:
             result = await session.execute(query)
         return result.mappings().all()

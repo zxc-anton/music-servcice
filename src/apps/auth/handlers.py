@@ -2,18 +2,13 @@ import bcrypt
 from settings.setting import settings
 from itsdangerous import URLSafeTimedSerializer, BadSignature
 from src.apps.auth.schemas import TokenData
-from src.schemas import EmailField
+from src.schemas import Email_Field
 from fastapi import HTTPException
 import jwt
 from typing import Any
 
 
-
-
-class Handlers:
-    def __init__(self):
-        self.serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(secret_key=settings.secret_key.get_secret_value())
-
+class Password_Handlers:
     async def get_hashed_password(self, password: str) -> str:
         salt = bcrypt.gensalt()
         bytes_password = password.encode("utf-8")
@@ -23,12 +18,15 @@ class Handlers:
     async def compare_passwords(self, raw_password: str, hash_password: str) -> bool:
         return bcrypt.checkpw(password=raw_password.encode('utf-8'), hashed_password=hash_password.encode('utf-8'))
 
-        
+
+class Token_Handlers:
+    def __init__(self):
+        self.serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(secret_key=settings.secret_key.get_secret_value())
     
-    async def create_verify_token(self, email: EmailField) -> str: 
+    async def create_verify_token(self, email: Email_Field) -> str: 
         return self.serializer.dumps(email)
     
-    async def load_verify_token(self, token: str) -> EmailField:
+    async def load_verify_token(self, token: str) -> Email_Field:
         try:
             email = self.serializer.loads(token)
             return email

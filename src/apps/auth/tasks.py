@@ -1,13 +1,13 @@
 from core.async_queue.celery_config import app
 import smtplib
 from settings.setting import settings
-from src.schemas import EmailField
+from src.schemas import Email_Field
 from email.message import EmailMessage
 import ssl
 
 
 @app.task(max_retries=3, name="send_verify_email")
-def send_verify_email(user_email: EmailField, token: str) -> None:
+def send_verify_email(user_email: Email_Field, token: str) -> None:
     
     url = f"{settings.frontend_url}/auth/confirm_user?token={token}"
     msg = EmailMessage()

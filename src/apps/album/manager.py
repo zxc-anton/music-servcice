@@ -5,6 +5,9 @@ from database.models import Album, Track
 from sqlalchemy.exc import NoResultFound
 from fastapi import HTTPException
 from database.association_tables import Album_Track
+from src.apps.album.schemas import (Album_Response, Album_Attributes, 
+                                    Album_Schema, Album_Tracks_Response)
+from src.apps.track.schemas import Track_Schema, Track_Attributes
 
 
 class Manager:
@@ -14,20 +17,23 @@ class Manager:
         self.track_model = Track
         self.album_track_model = Album_Track
 
-    async def get_album(self, ID: ID_Field):
+    async def get_album(self, ID: ID_Field) -> Album_Response:
         query = sa.select(self.model).where(self.model.ID == ID)
         async with self.db.get_session() as session:
             result = await session.execute(query)
         try:
-            return result.mappings().one()
+            album =  result.scalar_one()
+            return Album_Response(data=Album_Schema(ID=album.ID, 
+                                                    attributes=Album_Attributes(title=album.title, cover_url=album.cover_url),
+                                                    ))
         except  NoResultFound: 
             raise HTTPException(404, "Album not found.")
         
-    async def get_album_track(self, ID: ID_Field):
-        query =(sa.select(self.model, self.track_model)
-                .where(self.model.ID==ID)
-                .join(self.album_track_model, self.album_track_model.c.album_ID==self.model.ID)
-                .join(self.track_model, self.album_track_model.c.track_ID==self.track_model.ID))
+    async def get_album_tracks(self, ID: ID_Field):
+        query =(sa.select(self.track_model)
+                .where(self.track_model.album_ID==ID)
+            )
         async with self.db.get_session() as session:
             result = await session.execute(query)
-        return result.mappings().all()
+        tracks = result.scalars()
+        return Album_Tracks_Response(data=[Track_Schema(ID=track.ID, attributes=Track_Attributes(title=track.title, album_ID=track.album_ID, file_url=track.file_url)) for track in tracks])

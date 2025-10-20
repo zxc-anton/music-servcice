@@ -11,4 +11,7 @@ class Service:
         return await self.manager.add_in_favorites(track_ID=track_ID, user_ID=user_ID)
     
     async def create_playlist(self, user_ID: ID_Field, playlist: Playlist):
-        return await self.manager.create_playlist(CreatePlaylist(user_ID=user_ID, name=playlist.name, is_public=playlist.is_public))
+        return await self.manager.create_playlist(CreatePlaylist(user_ID=user_ID.ID, name=playlist.name, is_public=playlist.is_public))
+    
+    async def add_track_in_playlist(self, user_ID: ID_Field, playlist_ID: ID_Field, track_ID: ID_Field):
+        return await self.manager.add_track_in_playlist(track_ID=track_ID, playlist_ID=playlist_ID, user_ID=user_ID)

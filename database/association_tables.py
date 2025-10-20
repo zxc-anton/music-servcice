@@ -28,8 +28,8 @@ Album_Track = sa.Table("album_track",
 
 Playlist_Track = sa.Table("playlist_track",
                           Base.metadata,
-                          sa.Column("playlist_ID ", sa.Integer(), sa.ForeignKey("playlist.ID"), nullable=True),
-                          sa.Column("track_ID", sa.Integer(), sa.ForeignKey("track.ID"), nullable=True)
+                          sa.Column("playlist_ID", sa.Integer(), sa.ForeignKey("playlist.ID")),
+                          sa.Column("track_ID", sa.Integer(), sa.ForeignKey("track.ID"))
                           )
 
 Listen_History = sa.Table("listen_history",

@@ -1,9 +1,8 @@
 from pydantic import BaseModel
-from src.schemas import ID_Field
 
 
 class CreatePlaylist(BaseModel):
-    user_ID: ID_Field
+    user_ID: int
     name: str | None
     is_public: bool
 

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from src.schemas import NameField, EmailField, ID_Field, PasswordField
+from src.schemas import Name_Field, Email_Field, ID_Field, Password_Field
 from enum import Enum
 from datetime import datetime, timedelta, timezone
 
@@ -10,13 +10,13 @@ class TokenType(Enum):
     access = "access_token"
     refresh = "refresh_token"
 
-class ReguesterUser(EmailField, NameField, PasswordField, BaseModel):
+class ReguesterUser(Email_Field, Name_Field, Password_Field, BaseModel):
     """Схема данных для регистрации пользователя."""
     pass
 
 
 
-class CreateUser(EmailField, NameField, BaseModel):
+class CreateUser(Email_Field, Name_Field, BaseModel):
     """Схема данных для создания пользователя в базе данных."""
     password_hash: str
     
@@ -35,7 +35,7 @@ class TokenData(ID_Field, BaseModel):
 
 
 
-class LoginUser(EmailField, PasswordField, BaseModel): 
+class LoginUser(Email_Field, Password_Field, BaseModel): 
     """Схема данных для входа пользователя."""
     pass
 

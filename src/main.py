@@ -7,7 +7,8 @@ from fastapi.responses import ORJSONResponse
 
 
 app = FastAPI(
-    default_response_class=ORJSONResponse
+    default_response_class=ORJSONResponse,
+    title="music-servic"
 )
 
 app.add_middleware(

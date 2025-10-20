@@ -1,19 +1,20 @@
 from src.apps.user.dependency import manager
-from src.schemas import ID_Field, PaginationParams
+from src.schemas import ID_Field, Pagination_Params, User_Response
+from src.apps.user.schemas import Listen_History_Response
 
 
 class Service:
     def __init__(self, manager: manager) -> None:
         self.manager = manager
 
-    async def get_user(self, ID: ID_Field):
+    async def get_user(self, ID: ID_Field) -> User_Response:
         return await self.manager.get_user(ID=ID)
 
-    async def get_listen_history(self, pagination: PaginationParams, ID: ID_Field):
+    async def get_listen_history(self, pagination: Pagination_Params, ID: ID_Field) -> Listen_History_Response:
         return await self.manager.get_listen_history(pagination=pagination, ID=ID)
     
-    async def get_playlists(self, ID: ID_Field, pagination: PaginationParams):
+    async def get_playlists(self, ID: ID_Field, pagination: Pagination_Params):
         return await self.manager.get_playlists(ID=ID, pagination=pagination)
     
-    async def get_favorits(self, ID: ID_Field, pagination: PaginationParams):
+    async def get_favorits(self, ID: ID_Field, pagination: Pagination_Params):
         return await self.manager.get_favorits(ID=ID, pagination=pagination)
