@@ -25,10 +25,22 @@ async def get_listen_history(service: user_service, user: current_user, paginati
 async def add_in_favorites(service: service, user: current_user, track_ID: ID_Field):
     return await service.add_in_favorites(track_ID=track_ID, user_ID=ID_Field(ID=user.data.ID))
 
-@router.post("/playlist", status_code=201)
+@router.post("/playlists", status_code=201)
 async def create_playlist(service: service, user: current_user, playlist: Playlist):
     return await service.create_playlist(user_ID=ID_Field(ID=user.data.ID), playlist=playlist)
 
-@router.put("/playlist/{ID}/tracks")
+@router.put("/playlists/{ID}/tracks")
 async def add_track_in_playlist(service: service, user: current_user, ID: int, track_ID: ID_Field):
     return await service.add_track_in_playlist(user_ID=user.data.ID, playlist_ID=ID, track_ID=track_ID.ID)
+
+@router.delete("/favorits")
+async def delete_track_from_favorits(service: service, user: current_user, track_ID: ID_Field):
+    return await service.delete_track_from_favorits(user_ID=user.data.ID, track_ID=track_ID)
+
+@router.delete("/playlists/{ID}/track")
+async def delete_track_from_playlist(service: service, user: current_user, ID: int, track_ID: ID_Field):
+    return await service.delete_track_from_playlist(user_ID=user.data.ID, track_ID=track_ID, playlist_ID=ID)
+
+@router.delete("/playlists/{ID}")
+async def delete_playlist(service: service, ID: int, user: current_user):
+    return await service.delete_playlist(user_ID=user.data.ID, playlist_ID=ID)

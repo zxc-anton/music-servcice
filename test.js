@@ -26,7 +26,7 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get('http://0.0.0.0:8000/api/users/35');
+  const res = http.get('http://127.0.0.1:8000/api/stream/3');
   
   check(res, {
     'status is 200': (r) => r.status === 200,

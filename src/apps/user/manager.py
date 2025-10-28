@@ -1,4 +1,3 @@
-import trace
 from src.dependency import db
 from src.schemas import (ID_Field, Pagination_Params, 
                         User_Response, User_Attributes, 

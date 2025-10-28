@@ -1,9 +1,12 @@
-from core.async_queue.celery_config import app
+from core.async_queue.celery_config import Celery_Dependency
 import smtplib
 from settings.setting import settings
 from src.schemas import Email_Field
 from email.message import EmailMessage
 import ssl
+from src.apps.auth.dependency import celery_app
+
+app = celery_app.get_app()
 
 
 @app.task(max_retries=3, name="send_verify_email")

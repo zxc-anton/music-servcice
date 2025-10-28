@@ -1,3 +1,5 @@
+from typing import Annotated
+from fastapi import Depends
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr, Field
 
@@ -10,12 +12,16 @@ class DB_settings(BaseSettings):
     db_password: SecretStr
     db_echo: bool = False
     db_pool_size: int = Field(gt=0)
-
+    
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @property
     def get_url(self):
         return f"postgresql+asyncpg://{self.db_user}:{self.db_password.get_secret_value()}@{self.db_host.get_secret_value()}:{self.db_port}/{self.db_name}"
+    
+    @property
+    def get_test_url(self):
+        return f"sqlite+aiosqlite:///{self.db_name}"
     
 class Redis_settings(BaseSettings):
     redis_port: int

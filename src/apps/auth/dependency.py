@@ -2,10 +2,14 @@ from fastapi import Depends, HTTPException, Request
 from typing import Annotated
 from src.apps.auth.schemas import TokenType
 from src.schemas import User_Response, User_Attributes, User_Schema
+from core.async_queue.celery_config import Celery_Dependency
+
+celery_app: Celery_Dependency = Celery_Dependency()
 
 from src.apps.auth.handlers import Token_Handlers, Password_Handlers
 token_handlers = Annotated[Token_Handlers, Depends(Token_Handlers)]
 password_handlers = Annotated[Password_Handlers, Depends(Password_Handlers)]
+
 
 from src.apps.auth.manager import Manager
 manager = Annotated[Manager, Depends(Manager)]

@@ -5,8 +5,8 @@ from contextlib import asynccontextmanager
 
 
 class DB_dependency:
-    def __init__(self) -> None:
-        self._async_engine = create_async_engine(url=settings.db_settings.get_url, echo=settings.db_settings.db_echo)
+    def __init__(self, db_url: str = settings.db_settings.get_url) -> None:
+        self._async_engine = create_async_engine(url=db_url, echo=settings.db_settings.db_echo)
         self._async_session_maker = async_sessionmaker(autoflush=False, bind=self._async_engine)
 
     @asynccontextmanager

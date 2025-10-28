@@ -15,3 +15,12 @@ class Service:
     
     async def add_track_in_playlist(self, user_ID: ID_Field, playlist_ID: ID_Field, track_ID: ID_Field):
         return await self.manager.add_track_in_playlist(track_ID=track_ID, playlist_ID=playlist_ID, user_ID=user_ID)
+    
+    async def delete_track_from_favorits(self, user_ID: ID_Field, track_ID: ID_Field):
+        return await self.manager.delete_track_from_favorits(user_ID=user_ID, track_ID=track_ID)
+    
+    async def delete_track_from_playlist(self, user_ID: ID_Field, track_ID: ID_Field, playlist_ID):
+        return await self.manager.delete_track_from_playlist(user_ID=user_ID, playlist_ID=playlist_ID, track_ID=track_ID)
+    
+    async def delete_playlist(self, user_ID: ID_Field, playlist_ID: ID_Field):
+        return await self.manager.delete_playlist(user_ID=user_ID, playlist_ID=playlist_ID)
