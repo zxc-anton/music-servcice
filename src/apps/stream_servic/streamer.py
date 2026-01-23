@@ -19,7 +19,7 @@ class StreamMusic:
             try:
                 stream: StreamingBody = response["Body"]
                 async with stream:
-                    while chunk := await stream.read(8192):  # Исправлен размер чанка
+                    while chunk := await stream.read(4096):  # Исправлен размер чанка
                         yield chunk
             except Exception as e:
                 print(f"Stream reading error: {e}")

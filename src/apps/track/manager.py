@@ -2,6 +2,7 @@ from src.dependency import db
 from database.models import Track, User, Author
 from src.schemas import ID_Field, Pagination_Params
 import sqlalchemy as sa
+import sqlalchemy.orm as so
 from database.association_tables import Track_Artist
 from sqlalchemy import func
 from sqlalchemy.exc import NoResultFound
@@ -19,11 +20,12 @@ class Manager:
 
     async def get_track_by_id(self, ID: ID_Field):
         query = (sa.select(self.model)
-                           .where(self.model.ID==ID.ID))
+                           .where(self.model.ID==ID.ID)
+                           .options(so.selectinload(self.model.authors)))
         async with self.db.get_session() as session:
-            result = await session.get(self.model, ID.ID)
+            result = await session.execute(query)
             try:
-                return result
+                return result.scalar_one()
             
                 #return Track_Response(data=Track_Schema(ID=track["ID"], attributes=Track_Attributes(title=track["title"], file_url=track["file_url"], album_ID=track["album_ID"])))
             except NoResultFound:

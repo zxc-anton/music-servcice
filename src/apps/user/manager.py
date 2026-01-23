@@ -1,3 +1,4 @@
+from src.apps.artist.schemas import Artist_Schema
 from src.dependency import db
 from src.schemas import (ID_Field, Pagination_Params, 
                         User_Response, User_Attributes, 
@@ -8,7 +9,7 @@ from src.apps.user.schemas import (Listen_History_Response, Playlists_Response,
                                    Favorits_Response)
 from database.models import Track, Author, User, Playlist
 import sqlalchemy as sa
-from database.association_tables import Listen_History, favorites
+from database.association_tables import Listen_History, favorites, Track_Artist
 from sqlalchemy.exc import NoResultFound
 from fastapi import HTTPException
 
@@ -42,14 +43,18 @@ class Manager:
     async def get_listen_history(self, pagination: Pagination_Params, ID: ID_Field) -> Listen_History_Response:
         query = (sa.select(self.model.ID, self.track_model.title, self.track_model.file_url, self.track_model.album_ID, self.listen_history.c.track_ID, self.listen_history.c.listened_at, self.author_model.ID,
                            self.author_model.name, self.author_model.photo_url)
+                .select_from(self.listen_history)
                  .join(self.model, self.model.ID == self.listen_history.c.user_ID)
-                 .join(self.author_model, self.track_model.authors)
+                 .join(Track_Artist, self.track_model.ID == Track_Artist.c.track_ID)
+                 .join(self.author_model, self.author_model.ID == Track_Artist.c.author_ID)
                  .where(self.model.ID == ID.ID)
                  .order_by(sa.desc(self.listen_history.c.listened_at))
                  .offset(pagination.offset)
                  .limit(pagination.limit))
         async with self.db.get_session() as session:
             result = await session.execute(query)
+        #     print((await session.execute(sa.select(Listen_History).where(Listen_History.c.user_ID == ID.ID))).all())
+        # print(result.all())
         return Listen_History_Response(data=[ Track_Schema(ID=track["ID"], attributes=Track_Attributes(title=track["title"], album_ID=track["album_ID"], file_url=track["file_url"])) for track in result.mappings().all()])
     
     async def get_playlists(self, ID: ID_Field, pagination: Pagination_Params) -> Playlists_Response:
@@ -70,5 +75,7 @@ class Manager:
                  .limit(pagination.limit))
         async with self.db.get_session() as session:
             result = await session.execute(query)
+            print((await session.execute(sa.select(favorites))).all())
         tracks = result.mappings().all()
+        print(tracks)
         return Favorits_Response(data=[Track_Schema(ID=track["ID"], attributes=Track_Attributes(title=track["title"], album_ID=track["album_ID"], file_url=track["file_url"])) for track in tracks])

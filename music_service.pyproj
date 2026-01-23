@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8329d746-7c25-4afb-8850-59d1b12ebc89}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>main.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>MSBuild|.venv|$(MSBuildProjectFullPath)</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="alembic.ini" />
+    <Content Include="test.js" />
+    <Content Include="tests\pytest.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="core\async_queue\celery_config.py" />
+    <Compile Include="core\async_queue\__init__.py" />
+    <Compile Include="core\db\db_dependency\connect_db.py" />
+    <Compile Include="core\db\db_dependency\__init__.py" />
+    <Compile Include="core\db\redis_dependency\connect_redis.py" />
+    <Compile Include="core\db\redis_dependency\__init__.py" />
+    <Compile Include="core\db\__init__.py" />
+    <Compile Include="core\s3\s3_client.py" />
+    <Compile Include="core\s3\__init__.py" />
+    <Compile Include="database\association_tables.py" />
+    <Compile Include="database\mixins.py" />
+    <Compile Include="database\models.py" />
+    <Compile Include="database\__init__.py" />
+    <Compile Include="gunicorn_conf.py" />
+    <Compile Include="main.py" />
+    <Compile Include="migrations\env.py" />
+    <Compile Include="migrations\versions\2bdd2a1b75ab_.py" />
+    <Compile Include="migrations\versions\3fbcbd4495e3_.py" />
+    <Compile Include="migrations\versions\42fa075fb02d_.py" />
+    <Compile Include="migrations\versions\460f063067b2_.py" />
+    <Compile Include="migrations\versions\4e8bbe4b20d6_.py" />
+    <Compile Include="migrations\versions\81aa82e888e4_.py" />
+    <Compile Include="migrations\versions\849f0e8a17e2_first_migration.py" />
+    <Compile Include="migrations\versions\b69f09d116d5_add_album_id_field_into_track.py" />
+    <Compile Include="migrations\versions\d07c6bcfc9d6_add_cascde_delete.py" />
+    <Compile Include="migrations\versions\d2c0736eaac1_.py" />
+    <Compile Include="migrations\versions\f4fb46936aeb_fix_cascade_delete.py" />
+    <Compile Include="migrations\versions\f646348a63ea_.py" />
+    <Compile Include="migrations\versions\f6b2dbfda4ca_lower_case_for_assciation_tables.py" />
+    <Compile Include="run.py" />
+    <Compile Include="settings\setting.py" />
+    <Compile Include="settings\__init__.py" />
+    <Compile Include="src\apps\album\depenency.py" />
+    <Compile Include="src\apps\album\main.py" />
+    <Compile Include="src\apps\album\manager.py" />
+    <Compile Include="src\apps\album\routers.py" />
+    <Compile Include="src\apps\album\schemas.py" />
+    <Compile Include="src\apps\album\service.py" />
+    <Compile Include="src\apps\album\__init__.py" />
+    <Compile Include="src\apps\artist\dependency.py" />
+    <Compile Include="src\apps\artist\main.py" />
+    <Compile Include="src\apps\artist\manager.py" />
+    <Compile Include="src\apps\artist\routers.py" />
+    <Compile Include="src\apps\artist\schemas.py" />
+    <Compile Include="src\apps\artist\service.py" />
+    <Compile Include="src\apps\artist\__init__.py" />
+    <Compile Include="src\apps\auth\dependency.py" />
+    <Compile Include="src\apps\auth\handlers.py" />
+    <Compile Include="src\apps\auth\main.py" />
+    <Compile Include="src\apps\auth\manager.py" />
+    <Compile Include="src\apps\auth\routers.py" />
+    <Compile Include="src\apps\auth\schemas.py" />
+    <Compile Include="src\apps\auth\service.py" />
+    <Compile Include="src\apps\auth\tasks.py" />
+    <Compile Include="src\apps\auth\__init__.py" />
+    <Compile Include="src\apps\main.py" />
+    <Compile Include="src\apps\me\dependency.py" />
+    <Compile Include="src\apps\me\main.py" />
+    <Compile Include="src\apps\me\manager.py" />
+    <Compile Include="src\apps\me\routers.py" />
+    <Compile Include="src\apps\me\schemas.py" />
+    <Compile Include="src\apps\me\service.py" />
+    <Compile Include="src\apps\me\__init__.py" />
+    <Compile Include="src\apps\playlist\dependecy.py" />
+    <Compile Include="src\apps\playlist\main.py" />
+    <Compile Include="src\apps\playlist\manager.py" />
+    <Compile Include="src\apps\playlist\routers.py" />
+    <Compile Include="src\apps\playlist\schemas.py" />
+    <Compile Include="src\apps\playlist\service.py" />
+    <Compile Include="src\apps\playlist\__init__.py" />
+    <Compile Include="src\apps\search\dependency.py" />
+    <Compile Include="src\apps\search\main.py" />
+    <Compile Include="src\apps\search\manager.py" />
+    <Compile Include="src\apps\search\routers.py" />
+    <Compile Include="src\apps\search\service.py" />
+    <Compile Include="src\apps\search\__init__.py" />
+    <Compile Include="src\apps\stream_servic\dependency.py" />
+    <Compile Include="src\apps\stream_servic\main.py" />
+    <Compile Include="src\apps\stream_servic\routers.py" />
+    <Compile Include="src\apps\stream_servic\streamer.py" />
+    <Compile Include="src\apps\stream_servic\__init__.py" />
+    <Compile Include="src\apps\track\depends.py" />
+    <Compile Include="src\apps\track\main.py" />
+    <Compile Include="src\apps\track\manager.py" />
+    <Compile Include="src\apps\track\routers.py" />
+    <Compile Include="src\apps\track\schemas.py" />
+    <Compile Include="src\apps\track\service.py" />
+    <Compile Include="src\apps\track\__init__.py" />
+    <Compile Include="src\apps\user\dependency.py" />
+    <Compile Include="src\apps\user\main.py" />
+    <Compile Include="src\apps\user\manager.py" />
+    <Compile Include="src\apps\user\routers.py" />
+    <Compile Include="src\apps\user\schemas.py" />
+    <Compile Include="src\apps\user\service.py" />
+    <Compile Include="src\apps\user\__init__.py" />
+    <Compile Include="src\apps\__init__.py" />
+    <Compile Include="src\dependency.py" />
+    <Compile Include="src\main.py" />
+    <Compile Include="src\schemas.py" />
+    <Compile Include="src\__init__.py" />
+    <Compile Include="tests\conftest.py" />
+    <Compile Include="tests\test_album\album.py" />
+    <Compile Include="tests\test_album\__init__.py" />
+    <Compile Include="tests\test_auth.py" />
+    <Compile Include="tests\test_playlist\test_playlist.py" />
+    <Compile Include="tests\test_playlist\__init__.py" />
+    <Compile Include="tests\test_search\test_search.py" />
+    <Compile Include="tests\test_track\test_track.py" />
+    <Compile Include="tests\test_track\__init__.py" />
+    <Compile Include="tests\test_user\test_get_user.py" />
+    <Compile Include="tests\test_user\__init__.py" />
+    <Compile Include="tests\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="core\" />
+    <Folder Include="core\async_queue" />
+    <Folder Include="core\db" />
+    <Folder Include="core\db\db_dependency" />
+    <Folder Include="core\db\redis_dependency" />
+    <Folder Include="core\s3" />
+    <Folder Include="database" />
+    <Folder Include="migrations" />
+    <Folder Include="migrations\versions" />
+    <Folder Include="settings" />
+    <Folder Include="src" />
+    <Folder Include="src\apps" />
+    <Folder Include="src\apps\album" />
+    <Folder Include="src\apps\artist" />
+    <Folder Include="src\apps\auth" />
+    <Folder Include="src\apps\me" />
+    <Folder Include="src\apps\playlist" />
+    <Folder Include="src\apps\search" />
+    <Folder Include="src\apps\stream_servic" />
+    <Folder Include="src\apps\track" />
+    <Folder Include="src\apps\user" />
+    <Folder Include="tests" />
+    <Folder Include="tests\test_album" />
+    <Folder Include="tests\test_playlist" />
+    <Folder Include="tests\test_search" />
+    <Folder Include="tests\test_track" />
+    <Folder Include="tests\test_user" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include=".venv\">
+      <Id>.venv</Id>
+      <Description>.venv (Python 3.13 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <Version>3.13</Version>
+      <Architecture>X64</Architecture>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+    </Interpreter>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

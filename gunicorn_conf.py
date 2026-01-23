@@ -22,4 +22,4 @@ loglevel = "info"
 
 # Перезагрузка
 preload_app = True
-reload = False
+reload = FalseЁ
