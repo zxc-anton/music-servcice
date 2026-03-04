@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.apps.main import router
 from fastapi.responses import ORJSONResponse
+from src.apps.admin.admin_base import setup_admin
 
 
 
@@ -20,3 +21,4 @@ app.add_middleware(
 )
 
 app.include_router(router)
+setup_admin(app)

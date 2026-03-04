@@ -1,3 +1,5 @@
+from pydantic import EmailStr
+
 from src.apps.auth.manager import Manager
 from src.apps.auth.handlers import Token_Handlers, Password_Handlers
 from src.apps.auth.dependency import manager, password_handlers, token_handlers
@@ -13,7 +15,12 @@ from typing import Annotated
 
 
 class Service:
-    def __init__(self, manager: manager, password_handlers: password_handlers, token_handlers: token_handlers):
+    def __init__(
+                self, manager: manager,
+                 password_handlers: password_handlers,
+                 token_handlers: token_handlers,
+                ):
+        
         self.manager: Manager = manager
         self.password_handlers: Password_Handlers = password_handlers
         self.token_handlers: Token_Handlers = token_handlers
@@ -24,7 +31,7 @@ class Service:
         new_user = CreateUser(name=user_data.name, email=user_data.email, password_hash=password_hash)
         user = await self.manager.create_user(new_user)
         token = await self.token_handlers.create_verify_token(email=user_data.email)
-        send_verify_email.delay(user_data.email, token)
+        send_verify_email(user_data.email, token)
         return user
 
     async def get_user_by_id(self, ID: ID_Field) -> User_DTO:
@@ -34,7 +41,7 @@ class Service:
         email = await self.token_handlers.load_verify_token(token)
         await self.manager.confirm_user(email)
         
-    async def get_user_by_email(self, email: Email_Field) -> User_DTO:
+    async def get_user_by_email(self, email: EmailStr) -> User_DTO:
         return await self.manager.get_user_by_email(email)
 
     async def login(self, login_user: LoginUser) -> ORJSONResponse:

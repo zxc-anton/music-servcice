@@ -23,10 +23,10 @@ class Token_Handlers:
     def __init__(self):
         self.serializer: URLSafeTimedSerializer = URLSafeTimedSerializer(secret_key=settings.secret_key.get_secret_value())
     
-    async def create_verify_token(self, email: Email_Field) -> str: 
+    async def create_verify_token(self, email: str) -> str: 
         return self.serializer.dumps(email)
     
-    async def load_verify_token(self, token: str) -> Email_Field:
+    async def load_verify_token(self, token: str) -> str:
         try:
             email = self.serializer.loads(token)
             return email

@@ -10,7 +10,7 @@ app = celery_app.get_app()
 
 
 @app.task(max_retries=3, name="send_verify_email")
-def send_verify_email(user_email: Email_Field, token: str) -> None:
+def send_verify_email(user_email: str, token: str) -> None:
     
     url = f"{settings.frontend_url}/auth/confirm_user?token={token}"
     msg = EmailMessage()

@@ -1,5 +1,5 @@
-from unittest import result
 from fastapi import Depends, HTTPException
+from pydantic import EmailStr
 from core.db.db_dependency.connect_db import DB_dependency
 from src.apps.auth.schemas import ID_Field, Email_Field
 from src.schemas import User_DTO
@@ -42,7 +42,7 @@ class Manager:
     
 
     
-    async def get_user_by_email(self, email: Email_Field) -> User_DTO:
+    async def get_user_by_email(self, email: EmailStr) -> User_DTO:
         query = (sa.select(self.model.ID, self.model.name, self.model.avatar_url).
                  where(self.model.email == email))
         async with self.db.get_session() as session:
@@ -52,14 +52,14 @@ class Manager:
             raise HTTPException(404, "User not found")
         return User_DTO(**user)
 
-    async def confirm_user(self, email: Email_Field):
+    async def confirm_user(self, email: str):
         """Актиация аккаунта пользователя."""
         query = (sa.update(self.model).where(self.model.email==email).values(is_verification=True))
         async with self.db.get_session() as session:
             await session.execute(query)
             await session.commit()
 
-    async def get_user_password(self, email: Email_Field) -> str:
+    async def get_user_password(self, email: EmailStr) -> str:
         query = sa.select(self.model.password_hash).where(self.model.email == email)
         async with self.db.get_session() as session:
             result = await session.execute(query)

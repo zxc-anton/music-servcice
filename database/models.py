@@ -3,8 +3,12 @@ from database.mixins import ID_mixin, TIMESTAMP_mixin
 import sqlalchemy.orm as so
 import sqlalchemy as sa
 from typing import Annotated
+from database.enums import Countries, Languages
 
 path_str = Annotated[str, so.mapped_column(sa.String, unique=True, nullable=True)]
+
+
+
 
 
 class Base(DeclarativeBase):
@@ -23,8 +27,9 @@ class User(ID_mixin, TIMESTAMP_mixin, Base):
     is_verification: so.Mapped[bool] = so.mapped_column(nullable=False, default=False)
 
     playlists: so.Mapped[list["Playlist"]] = so.relationship("Playlist", back_populates="user", cascade="all, delete")
-    tracks: so.Mapped[list["Track"]] = so.Relationship("Track", secondary=favorites, back_populates="users", cascade="all, delete")
-    listening_songs: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Listen_History, back_populates="listening_users", cascade="all, delete")
+    tracks: so.Mapped[list["Track"]] = so.Relationship("Track", secondary=favorites, back_populates="users")
+    listening_songs: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Listen_History, back_populates="listening_users")
+    profile: so.Mapped["Profile"] = so.relationship("Profile", back_populates="user", cascade="all, delete")
 
 class Track(TIMESTAMP_mixin, ID_mixin,  Base):
     title: so.Mapped[str] = so.mapped_column(sa.String, nullable=False, index=True)
@@ -59,4 +64,11 @@ class Playlist(TIMESTAMP_mixin, ID_mixin, Base):
     user_ID: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.ID"))
 
     user: so.Mapped["User"] = so.relationship("User", back_populates="playlists")
-    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Playlist_Track, back_populates="playlists", cascade="all, delete")
+    tracks: so.Mapped[list["Track"]] = so.relationship("Track", secondary=Playlist_Track, back_populates="playlists")
+
+class Profile(TIMESTAMP_mixin, ID_mixin, Base):
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey("user.ID"))
+    language: so.Mapped[Languages] = so.mapped_column(sa.Enum(Languages))
+    country: so.Mapped[Countries] = so.mapped_column(sa.Enum(Countries))
+
+    user: so.Mapped["User"] = so.relationship("User", back_populates="profile")

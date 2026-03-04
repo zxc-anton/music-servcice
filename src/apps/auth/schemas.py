@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from src.schemas import Name_Field, Email_Field, ID_Field, Password_Field
 from enum import Enum
 from datetime import datetime, timedelta, timezone
@@ -20,7 +20,8 @@ class CreateUser(Email_Field, Name_Field, BaseModel):
     """Схема данных для создания пользователя в базе данных."""
     password_hash: str
     
-
+class GetUserForAdmin(CreateUser, BaseModel):
+    is_superuser: bool
     
 class TokenData(ID_Field, BaseModel):
     """Схема данных для создания access или refresh токена"""

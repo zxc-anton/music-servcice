@@ -24,6 +24,7 @@ dependencies = [
     "pytest-asyncio>=1.2.0",
     "redis>=6.4.0",
     "sqlalchemy>=2.0.43",
+    "starlette-admin>=0.16.0",
     "uvicorn>=0.37.0",
 ]
 

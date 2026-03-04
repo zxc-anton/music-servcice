@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.ext.asyncio import async_sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncEngine
 from settings.setting import settings
 from contextlib import asynccontextmanager
 from threading import Lock
@@ -9,11 +9,11 @@ class DB_dependency:
     _instance = None
     _lock = Lock()
 
-    def __new__(cls, *args, **kwargs):
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(DB_dependency, cls).__new__(*args, **kwargs)
-        return cls
+    # def __new__(cls, *args, **kwargs):
+    #     with cls._lock:
+    #         if cls._instance is None:
+    #             cls._instance = super(DB_dependency, cls).__new__(*args, **kwargs)
+    #     return cls
 
     def __init__(self, db_url: str = settings.db_settings.get_url) -> None:
         self._async_engine = create_async_engine(url=db_url, echo=settings.db_settings.db_echo)
@@ -26,3 +26,11 @@ class DB_dependency:
                 yield session
             finally:
                 await session.close()
+
+    @property
+    def get_engine(self) -> AsyncEngine:
+        return self._async_engine
+    
+
+def get_engine() -> AsyncEngine:
+    return DB_dependency().get_engine
